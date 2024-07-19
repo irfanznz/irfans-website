@@ -33,6 +33,26 @@
 	border: none;
 }
 
+.skills {
+	@include flex-center;
+	justify-content: flex-end;
+
+	.description {
+		@include thinborder;
+		padding: 0 0.75em;
+		width: 33%;
+		height: 100%;
+	}
+
+	.skillbox {
+		@include thinborder;
+		border-left: 0;
+		width: 50%;
+		height: 50vh;
+		background-color: white;
+	}
+}
+
 .projects {
 	background-color: lightgray;
 }
@@ -40,8 +60,8 @@
 .conclusion {
 	.thanks {
 		@include thinborder;
-		padding: 1em;
-		font-size: 3em;
+		padding: 0.75em;
+		font: normal 4em "Dream Orphans";
 
 		.contacts {
 			display: flex;

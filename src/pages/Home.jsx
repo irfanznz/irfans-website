@@ -1,3 +1,4 @@
+import Skillbox from "../components/Skillbox";
 import "../styles/home.scss";
 import { ReactLenis, useLenis } from "lenis/react";
 
@@ -18,7 +19,16 @@ function Home() {
 			<div className="section"></div>
 
 			{/* Skills section */}
-			<div className="section"></div>
+			<div className="section skills">
+				<div className="description">
+					<h1>Skills</h1>
+					<p>
+						Here are some of the skills I have acquired over the
+						years.
+					</p>
+				</div>
+				<Skillbox />
+			</div>
 
 			{/* Projects section */}
 			<div className="section projects"></div>

@@ -1,9 +1,19 @@
 import { useEffect, useRef } from "react";
-import { Engine, Render, Bodies, World, Runner, Body } from "matter-js";
+import {
+	Engine,
+	Render,
+	Bodies,
+	World,
+	Runner,
+	Body,
+	MouseConstraint,
+	Mouse,
+	Events,
+} from "matter-js";
+import icon from "../assets/images/a.png";
 
 function Skillbox(props) {
 	const scene = useRef(null);
-	const isPressed = useRef(false);
 	const engine = useRef(Engine.create());
 	const renderRef = useRef();
 	const boundaries = useRef([]);
@@ -26,47 +36,49 @@ function Skillbox(props) {
 
 				// Update boundary positions and sizes
 				if (boundaries.current.length === 4) {
+					const boundaryThickness = 50;
+
 					Body.setPosition(boundaries.current[0], {
 						x: cw / 2,
-						y: -10,
+						y: -boundaryThickness / 2,
 					});
 					Body.setVertices(boundaries.current[0], [
 						{ x: 0, y: 0 },
 						{ x: cw, y: 0 },
-						{ x: cw, y: 20 },
-						{ x: 0, y: 20 },
+						{ x: cw, y: boundaryThickness },
+						{ x: 0, y: boundaryThickness },
 					]);
 
 					Body.setPosition(boundaries.current[1], {
-						x: -10,
+						x: -boundaryThickness / 2,
 						y: ch / 2,
 					});
 					Body.setVertices(boundaries.current[1], [
 						{ x: 0, y: 0 },
-						{ x: 20, y: 0 },
-						{ x: 20, y: ch },
+						{ x: boundaryThickness, y: 0 },
+						{ x: boundaryThickness, y: ch },
 						{ x: 0, y: ch },
 					]);
 
 					Body.setPosition(boundaries.current[2], {
 						x: cw / 2,
-						y: ch + 10,
+						y: ch + boundaryThickness / 2,
 					});
 					Body.setVertices(boundaries.current[2], [
 						{ x: 0, y: 0 },
 						{ x: cw, y: 0 },
-						{ x: cw, y: 20 },
-						{ x: 0, y: 20 },
+						{ x: cw, y: boundaryThickness },
+						{ x: 0, y: boundaryThickness },
 					]);
 
 					Body.setPosition(boundaries.current[3], {
-						x: cw + 10,
+						x: cw + boundaryThickness / 2,
 						y: ch / 2,
 					});
 					Body.setVertices(boundaries.current[3], [
 						{ x: 0, y: 0 },
-						{ x: 20, y: 0 },
-						{ x: 20, y: ch },
+						{ x: boundaryThickness, y: 0 },
+						{ x: boundaryThickness, y: ch },
 						{ x: 0, y: ch },
 					]);
 				}
@@ -94,26 +106,91 @@ function Skillbox(props) {
 			renderRef.current = render;
 
 			// Create boundary rectangles
+			const boundaryThickness = 50;
 			boundaries.current = [
-				Bodies.rectangle(cw / 2, -10, cw, 20, {
-					isStatic: true,
-					render: { opacity: 0 },
-				}), // top
-				Bodies.rectangle(-10, ch / 2, 20, ch, {
-					isStatic: true,
-					render: { opacity: 0 },
-				}), // left
-				Bodies.rectangle(cw / 2, ch + 10, cw, 20, {
-					isStatic: true,
-					render: { opacity: 0 },
-				}), // bottom
-				Bodies.rectangle(cw + 10, ch / 2, 20, ch, {
-					isStatic: true,
-					render: { opacity: 0 },
-				}), // right
+				Bodies.rectangle(
+					cw / 2,
+					-boundaryThickness / 2,
+					cw,
+					boundaryThickness,
+					{
+						isStatic: true,
+						render: { opacity: 0 },
+					},
+				), // top
+				Bodies.rectangle(
+					-boundaryThickness / 2,
+					ch / 2,
+					boundaryThickness,
+					ch,
+					{
+						isStatic: true,
+						render: { opacity: 0 },
+					},
+				), // left
+				Bodies.rectangle(
+					cw / 2,
+					ch + boundaryThickness / 2,
+					cw,
+					boundaryThickness,
+					{
+						isStatic: true,
+						render: { opacity: 0 },
+					},
+				), // bottom
+				Bodies.rectangle(
+					cw + boundaryThickness / 2,
+					ch / 2,
+					boundaryThickness,
+					ch,
+					{
+						isStatic: true,
+						render: { opacity: 0 },
+					},
+				), // right
 			];
 
 			World.add(engine.current.world, boundaries.current);
+
+			// Create hexagons
+			const hexagons = [];
+			for (let i = 0; i < 6; i++) {
+				const hexagon = Bodies.polygon(100 + i * 80, 100, 6, 40, {
+					restitution: 0.5,
+					friction: 0.75,
+					render: {
+						fillStyle: "#ffffff",
+						strokeStyle: "#000000",
+						lineWidth: 2,
+						sprite: {
+							texture: icon, // Replace with the path to your image
+							xScale: 0.5,
+							yScale: 0.5,
+						},
+					},
+				});
+				// Rotate the hexagon by 90 degrees (π/2 radians)
+				Body.rotate(hexagon, Math.PI / 2);
+				hexagons.push(hexagon);
+			}
+			World.add(engine.current.world, hexagons);
+
+			// Add mouse control
+			const mouse = Mouse.create(render.canvas);
+			const mouseConstraint = MouseConstraint.create(engine.current, {
+				mouse: mouse,
+				constraint: {
+					stiffness: 0.5,
+					render: {
+						visible: false,
+					},
+				},
+			});
+			mouse.current = mouseConstraint;
+			Events.on(mouseConstraint, "mousedown", (event) => {
+				console.log(mouseConstraint.body);
+			});
+			World.add(engine.current.world, mouseConstraint);
 
 			Runner.run(runner, engine.current);
 			Render.run(render);
@@ -139,42 +216,13 @@ function Skillbox(props) {
 		}
 	}, []);
 
-	const handleDown = () => {
-		isPressed.current = true;
-	};
-
-	const handleUp = () => {
-		isPressed.current = false;
-	};
-
-	const handleAddCircle = (e) => {
-		if (isPressed.current) {
-			const rect = scene.current.getBoundingClientRect();
-			const x = e.clientX - rect.left;
-			const y = e.clientY - rect.top;
-
-			const ball = Bodies.circle(x, y, 10 + Math.random() * 30, {
-				mass: 10,
-				restitution: 0.9,
-				friction: 0.005,
-				render: {
-					fillStyle: "#000000",
-				},
-			});
-			World.add(engine.current.world, [ball]);
-		}
-	};
-
 	return (
-		<div
-			onMouseDown={handleDown}
-			onMouseUp={handleUp}
-			onMouseMove={handleAddCircle}
-			className="skillbox"
-		>
+		<div className="skillbox">
 			<div ref={scene} style={{ width: "100%", height: "100%" }} />
 		</div>
 	);
 }
 
 export default Skillbox;
+
+// TODO: generate shapes base on skills icons. as these generate, keep track of object IDs and their corresponding skill names, such that when these objects are clicked, the corresponding skill description is displayed.

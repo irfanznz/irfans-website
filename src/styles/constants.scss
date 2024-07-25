@@ -6,28 +6,28 @@ $text-primary: #262626;
 
 @font-face {
 	font-family: "Dream Orphans";
-	src: url(".assets/fonts/dream-orphans.otf") format("otf");
+	src: url("../assets/fonts/dream-orphans.otf") format("opentype");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "Dream Orphans";
-	src: url(".assets/fonts/dream-orphans_bd.otf") format("otf");
+	src: url("../assets/fonts/dream-orphans_bd.otf") format("opentype");
 	font-weight: bold;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: "Dream Orphans";
-	src: url(".assets/fonts/dream-orphans_it.otf") format("otf");
+	src: url("../assets/fonts/dream-orphans_it.otf") format("opentype");
 	font-weight: normal;
 	font-style: italic;
 }
 
 @font-face {
 	font-family: "Dream Orphans";
-	src: url(".assets/fonts/dream-orphans_bd_it.otf") format("otf");
+	src: url("../assets/fonts/dream-orphans_bd_it.otf") format("opentype");
 	font-weight: bold;
 	font-style: italic;
 }

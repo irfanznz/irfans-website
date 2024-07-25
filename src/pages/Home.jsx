@@ -3,12 +3,9 @@ import "../styles/home.scss";
 import { ReactLenis, useLenis } from "lenis/react";
 
 function Home() {
-	const lenis = useLenis(({ scroll }) => {
-		// called every scroll
-	});
 
 	return (
-		<ReactLenis root>
+		<>
 			{/* Intro section */}
 			<div className="section intro">
 				<p>hi! i'm</p>
@@ -16,7 +13,11 @@ function Home() {
 			</div>
 
 			{/* About section */}
-			<div className="section"></div>
+			<div className="section about">
+			<div></div>
+			<div></div>
+			<div></div>
+			</div>
 
 			{/* Skills section */}
 			<div className="section skills">
@@ -47,7 +48,7 @@ function Home() {
 					</div>
 				</div>
 			</div>
-		</ReactLenis>
+		</>
 	);
 }
 

@@ -4,6 +4,11 @@
 	width: 100vw;
 }
 
+h1 {
+	font-family: "Dream Orphans";
+	font-weight: normal;
+}
+
 @mixin thinborder {
 	background-color: white;
 	border: 1px solid #000;
@@ -26,46 +31,99 @@
 	border-top: 1px solid #000;
 	background-color: #fff;
 	width: 100%;
+}
+
+#intro {
+	border: none;
 	height: 100vh;
 }
 
-.intro {
-	border: none;
+#about {
+	@include flex-center;
+	flex-direction: row;
+	align-items: stretch;
+	overflow: hidden;
+	background-size: 150vh;
+	background-position: -5vw -5vh;
+	background-repeat: repeat;
+	background-image: url("../assets/images/bg/dots.png");
+
+	#about-media {
+		width: 100%;
+		flex-grow: 2;
+	}
+
+	#about-desc {
+		width: 100%;
+		flex-grow: 3;
+		margin: 0 5em 0 5em;
+	}
 }
 
-.skills {
+#skills {
 	@include flex-center;
-	justify-content: flex-end;
+	background: url("../assets/images/bg/waves.png") repeat -10vw 0,
+		url("../assets/images/bg/waves.png") repeat 10vw -11.1vh;
+	background-size: 150vh, 150vh;
 
 	.description {
-		@include thinborder;
-		padding: 0 0.75em;
+		padding: 0 1em;
 		width: 33%;
-		height: 100%;
+		height: 100vh;
+		background-color: lightgray;
 	}
 
 	.skillbox {
 		@include thinborder;
-		border-left: 0;
+		border-right: 0;
 		width: 50%;
 		height: 50vh;
 		background-color: white;
 	}
 }
 
-.projects {
+#projects {
 	background-color: lightgray;
 }
 
-.conclusion {
+#conclusion {
 	.thanks {
 		@include thinborder;
 		padding: 0.75em;
+		margin: 1em;
 		font: normal 4em "Dream Orphans";
 
 		.contacts {
 			display: flex;
 			justify-content: space-around;
 		}
+	}
+}
+
+.about-segment {
+	white-space: pre-wrap;
+
+	.spacer {
+		height: 5em;
+	}
+
+	.connector {
+		@include flex-center();
+		flex-grow: 1;
+		height: 5em;
+		padding: 0 1em;
+
+		.connector-line {
+			height: 100%;
+			width: 1px;
+			background-color: #262626;
+		}
+	}
+
+	.content {
+		@include thinborder();
+		flex-grow: 1;
+		padding: 1em;
+		overflow-wrap: break-word;
 	}
 }

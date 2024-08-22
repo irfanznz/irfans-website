@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
+import { SkillContext } from "./SkillContext.jsx";
 import {
 	Engine,
 	Render,
@@ -10,10 +11,11 @@ import {
 	Mouse,
 	Events,
 } from "matter-js";
-import icon from "../assets/images/a.png";
 import skills from "../data/skills.js";
 
 function Skillbox(props) {
+	const { setSkillDesc } = useContext(SkillContext);
+
 	const scene = useRef(null);
 	const engine = useRef(Engine.create());
 	const renderRef = useRef();
@@ -193,15 +195,10 @@ function Skillbox(props) {
 				},
 			});
 			mouse.current = mouseConstraint;
-			console.log(skillIcons);
 			Events.on(mouseConstraint, "mousedown", (event) => {
-				console.log(
-					`${
-						mouseConstraint.body
-							? skillIcons[mouseConstraint.body.id]
-							: null
-					} clicked`,
-				);
+				if (mouseConstraint.body) {
+					setSkillDesc(skillIcons[mouseConstraint.body.id]);
+				}
 			});
 			World.add(engine.current.world, mouseConstraint);
 
